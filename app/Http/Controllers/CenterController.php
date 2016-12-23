@@ -28,11 +28,11 @@ class CenterController extends Controller
         // Check header from LINE
         $signature = $request->header(HTTPHeader::LINE_SIGNATURE);
         if (empty($signature)) {
-            // return $request->withStatus(400, 'Bad Request');
+            return $request->withStatus(400, 'Bad Request');
         }
 
         // Get event
-        $events = $this->bot->parseEventRequest($request->all(), $signature[0]);
+        $events = $this->bot->parseEventRequest(file_get_contents('php://input'), $signature);
 
         foreach ($event as $event) {
             if ($event instanceof MessageEvent) {
