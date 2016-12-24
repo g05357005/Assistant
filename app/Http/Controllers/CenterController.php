@@ -32,13 +32,14 @@ class CenterController extends Controller
         }
 
         // Get event
-        $events = $this->bot->parseEventRequest(file_get_contents('php://input'), $signature);
+        $body   = file_get_contents('php://input');
+        $events = $this->bot->parseEventRequest($body, $signature);
 
-        foreach ($event as $event) {
+        foreach ($events as $event) {
             if ($event instanceof MessageEvent) {
                 $text = $event->getText();
 
-                $response = $bot->replyText($event->getReplyToken(), $text);
+                $response = $this->bot->replyText($event->getReplyToken(), $text);
             }
         }
     }
