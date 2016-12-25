@@ -18,5 +18,3 @@ use Illuminate\Http\Request;
 // })->middleware('auth:api');
 
 Route::post('getEcho', 'CenterController@echo');
-
-Route::get('getEcho', 'CenterController@echo');

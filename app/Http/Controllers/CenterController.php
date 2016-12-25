@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
-use LINE\LINEBot\Event\MessageEvent;
+use LINE\LINEBot\Event\MessageEvent\TextMessage;
+use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot;
+use Illuminate\Support\Facades\Log;
 
 class CenterController extends Controller
 {
@@ -36,11 +38,53 @@ class CenterController extends Controller
         $events = $this->bot->parseEventRequest($body, $signature);
 
         foreach ($events as $event) {
-            if ($event instanceof MessageEvent) {
-                $text = $event->getText();
-
+            if ($event instanceof TextMessage) {
+                // Handle about text message
+                $text     = $event->getText();
                 $response = $this->bot->replyText($event->getReplyToken(), $text);
+
+                if ($response->isSucceeded()) {
+                    echo 'succeeded';
+                    continue;
+                }
+
+                // Logging
+                Log::warning($response->getHTTPStatus . ' ' . $response->getRawBody());
+                continue;
+            }
+
+            if ($event instanceof StickerMessage) {
+                $text      = '>/////<';
+                $packageId = $event->getPackageId();
+                $stickerId = $event->getStickerId();
+                $response  = $this->bot->replyText($event->getReplyToken(), $text);
+
+                if ($response->isSucceeded()) {
+                    echo 'succeeded';
+                    continue;
+                }
+
+                // Logging
+                Log::warning($response->getHTTPStatus . ' ' . $response->getRawBody());
+                continue;
             }
         }
+    }
+
+    // Message Center
+    public function center()
+    {
+
+    }
+
+    // Push messages to specific group of user
+    public function send()
+    {
+
+    }
+
+    public function test()
+    {
+
     }
 }
