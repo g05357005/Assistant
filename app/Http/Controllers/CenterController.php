@@ -49,7 +49,7 @@ class CenterController extends Controller
                 }
 
                 // Logging
-                Log::warning($response->getHTTPStatus . ' ' . $response->getRawBody());
+                Log::warning($response->getHTTPStatus() . ' ' . $response->getRawBody());
                 continue;
             }
 
@@ -65,20 +65,20 @@ class CenterController extends Controller
                 }
 
                 // Logging
-                Log::warning($response->getHTTPStatus . ' ' . $response->getRawBody());
+                Log::warning($response->getHTTPStatus() . ' ' . $response->getRawBody());
                 continue;
             }
         }
     }
 
-    // Message Center
-    public function center()
+    // Push messages to specific group of user
+    public function send()
     {
 
     }
 
-    // Push messages to specific group of user
-    public function send()
+    // Message Center
+    public function center()
     {
 
     }
