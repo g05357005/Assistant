@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use LINE\LINEBot;
 use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\StickerMessage;
-use LINE\LINEBot;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Illuminate\Support\Facades\Log;
 
 class CenterController extends Controller
@@ -42,7 +43,7 @@ class CenterController extends Controller
                 // Handle about text message
                 $text     = $event->getText();
                 $response = $this->bot->replyText($event->getReplyToken(), $text);
-
+Log::info('userId: ' . $event->getUserId());
                 if ($response->isSucceeded()) {
                     echo 'succeeded';
                     continue;
@@ -72,18 +73,18 @@ class CenterController extends Controller
     }
 
     // Push messages to specific group of user
-    public function send()
+    public function send(Request $request)
     {
+        $message            = $request->input('message');
+        $to                 = $request->input('userId');
+        $textMessageBuilder = new TextMessageBuilder($message);
+        $to                 = 'U331b3ee2aeed131f63764e8695999253';
 
+        $this->bot->pushMessage($to, $textMessageBuilder);
     }
 
     // Message Center
     public function center()
-    {
-
-    }
-
-    public function test()
     {
 
     }
