@@ -43,7 +43,7 @@ class CenterController extends Controller
                 // Handle about text message
                 $text     = $event->getText();
                 $response = $this->bot->replyText($event->getReplyToken(), $text);
-Log::info('userId: ' . $event->getUserId());
+
                 if ($response->isSucceeded()) {
                     echo 'succeeded';
                     continue;
