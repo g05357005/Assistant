@@ -1,6 +1,6 @@
 ## Line Bot
 
-A Personal Assistant via Line Bot
+A Personal Assistant on Line Bot
 
 #### Functions
 - weather reports
