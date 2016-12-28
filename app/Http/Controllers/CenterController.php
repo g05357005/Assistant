@@ -14,17 +14,14 @@ use GuzzleHttp\client;
 
 class CenterController extends Controller
 {
-    const CHANNEL_ACCESS_TOKEN = '5/e6JfcucgEbWqGb7+pfaAErw3BbhzM9VGA3fMOdP0F9m20q2DwAe7jSazDDGD9pL/5Z2lAAhluaD+zC6mxOjzbJbX/amlNDqaZuuiaAWn9BE9KbpE4nCIWazHiCv7VVqsZBcJU0Lwl6HmEhRSjlIgdB04t89/1O/w1cDnyilFU=';
-    const CHANNEL_SECRET = '8e0ee0e6b36483a1dd4a2a410147962c';
-
     private $httpClient;
     private $bot;
 
     public function __construct()
     {
         // Initialize
-        $this->httpClient = new CurlHTTPClient(self::CHANNEL_ACCESS_TOKEN);
-        $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => self::CHANNEL_SECRET]);
+        $this->httpClient = new CurlHTTPClient(env('BOT_CHANNEL_ACCESS_TOKEN'));
+        $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
     }
 
     public function echo(Request $request)
@@ -80,7 +77,7 @@ class CenterController extends Controller
         $success  = false;
 
         // Get weather data
-        $token  = 'CWB-7033857C-3EB3-41EF-BCEA-75C0CA04357F';
+        $token  = env('WEATHER_SERVICE_TOKEN');
         $dataId = 'F-C0032-009';
         $url    = sprintf('http://opendata.cwb.gov.tw/opendataapi?dataid=%s&authorizationkey=%s',$dataId , $token);
 
@@ -115,7 +112,7 @@ class CenterController extends Controller
         // $message            = $request->input('message');
         // $to                 = $request->input('userId');
         $textMessageBuilder = new TextMessageBuilder($message);
-        $to                 = 'U331b3ee2aeed131f63764e8695999253';
+        $to                 = env('BOT_TEST_MID');
 
         if ($success) {
             $this->bot->pushMessage($to, $textMessageBuilder);
