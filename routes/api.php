@@ -19,4 +19,4 @@ use Illuminate\Http\Request;
 
 Route::post('getEcho', 'CenterController@echo');
 
-Route::get('send', 'CenterController@send');
+Route::get('weather', 'CenterController@weatherInfo');

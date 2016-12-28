@@ -10,6 +10,7 @@ use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Illuminate\Support\Facades\Log;
+use GuzzleHttp\client;
 
 class CenterController extends Controller
 {
@@ -73,14 +74,52 @@ class CenterController extends Controller
     }
 
     // Push messages to specific group of user
-    public function send(Request $request)
+    public function weatherInfo(Request $request)
     {
-        $message            = $request->input('message');
-        $to                 = $request->input('userId');
+        $message = '';
+        $success  = false;
+
+        // Get weather data
+        $token  = 'CWB-7033857C-3EB3-41EF-BCEA-75C0CA04357F';
+        $dataId = 'F-C0032-009';
+        $url    = sprintf('http://opendata.cwb.gov.tw/opendataapi?dataid=%s&authorizationkey=%s',$dataId , $token);
+
+        $client  = new client();
+        $res     = $client->get($url);
+        
+        if ($res->getStatusCode() === 200) {
+            // echo 'succeeded';
+            $xmlData  = simplexml_load_string($res->getBody());
+            $dataSet  = $xmlData->dataset;
+            $wDescArr = $dataSet->parameterSet->parameter;
+
+            // echo '<pre>';
+            // print_r($dataSet);
+            // echo '</pre>';
+
+            // echo '<pre>';
+            // print_r($xmlData);
+            // echo '</pre>';
+
+            foreach($wDescArr as $desc) {
+                $message .= $desc->parameterValue;
+            }
+
+            $success = true;
+            // echo $message;
+
+        } else {
+
+        }
+
+        // $message            = $request->input('message');
+        // $to                 = $request->input('userId');
         $textMessageBuilder = new TextMessageBuilder($message);
         $to                 = 'U331b3ee2aeed131f63764e8695999253';
 
-        $this->bot->pushMessage($to, $textMessageBuilder);
+        if ($success) {
+            $this->bot->pushMessage($to, $textMessageBuilder);
+        }
     }
 
     // Message Center
