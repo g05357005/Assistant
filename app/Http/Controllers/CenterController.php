@@ -10,7 +10,7 @@ use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Illuminate\Support\Facades\Log;
-use GuzzleHttp\client;
+use GuzzleHttp\Client;
 
 class CenterController extends Controller
 {
@@ -81,7 +81,7 @@ class CenterController extends Controller
         $dataId = 'F-C0032-009';
         $url    = sprintf('http://opendata.cwb.gov.tw/opendataapi?dataid=%s&authorizationkey=%s',$dataId , $token);
 
-        $client  = new client();
+        $client  = new Client();
         $res     = $client->get($url);
         
         if ($res->getStatusCode() === 200) {
