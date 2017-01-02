@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use App\Helper\FlagHelper;
 use App\Services\WeatherService;
+use App\Services\RegisterService;
 
 class CenterController extends Controller
 {
@@ -44,6 +45,14 @@ class CenterController extends Controller
                 if ($event->getText() === '天氣' or $event->getText() === 'weather') {
                     $weatherService = new WeatherService($event);
                     $text = $weatherService->getInfo();
+                } else if ($event->getText() === '註冊') {
+                    $userService = new UserService();
+                    $profile = $this->bot->getProfile($event->getUserId());
+                    if ($userService->register($profile->displayName, $userService->SERVICES_WEATHER)) {
+                        $text = '已完成註冊';
+                    } else {
+                        $text = '註冊失敗，請重試';
+                    }
                 } else {
                     // Echo
                     $text = $event->getText();
@@ -79,7 +88,7 @@ class CenterController extends Controller
         }
     }
 
-    // Push messages to specific group of user
+    // only for test
     public function weatherInfo(Request $request)
     {
         $message = '';
