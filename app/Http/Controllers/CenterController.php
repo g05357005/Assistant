@@ -41,7 +41,7 @@ class CenterController extends Controller
         foreach ($events as $event) {
             if ($event instanceof TextMessage) {
                 // Weather info
-                if ($text === '天氣' or $text === 'weather') {
+                if ($event->getText() === '天氣' or $event->getText() === 'weather') {
                     $weatherService = new WeatherService($event);
                     $text = $weatherService->getInfo();
                 } else {
