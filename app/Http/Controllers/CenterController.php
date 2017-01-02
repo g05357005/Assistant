@@ -11,6 +11,8 @@ use LINE\LINEBot\Event\MessageEvent\StickerMessage;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
+use App\Helper\FlagHelper;
+use App\Services\WeatherService;
 
 class CenterController extends Controller
 {
@@ -24,7 +26,7 @@ class CenterController extends Controller
         $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
     }
 
-    public function echo(Request $request)
+    public function center(Request $request)
     {
         // Check header from LINE
         $signature = $request->header(HTTPHeader::LINE_SIGNATURE);
@@ -38,8 +40,15 @@ class CenterController extends Controller
 
         foreach ($events as $event) {
             if ($event instanceof TextMessage) {
-                // Handle about text message
-                $text     = $event->getText();
+                // Weather info
+                if ($text === '天氣' or $text === 'weather') {
+                    $weatherService = new WeatherService($event);
+                    $text = $weatherService->getInfo();
+                } else {
+                    // Echo
+                    $text = $event->getText();
+                }
+
                 $response = $this->bot->replyText($event->getReplyToken(), $text);
 
                 if ($response->isSucceeded()) {
@@ -112,16 +121,27 @@ class CenterController extends Controller
         // $message            = $request->input('message');
         // $to                 = $request->input('userId');
         $textMessageBuilder = new TextMessageBuilder($message);
-        $to                 = env('BOT_TEST_MID');
+        // $to                 = env('BOT_TEST_MID');
 
         if ($success) {
             $this->bot->pushMessage($to, $textMessageBuilder);
         }
     }
 
-    // Message Center
-    public function center()
+    public function test()
     {
+        $base = 0b1001;
+        $value = 1;
+
+        $flag = new FlagHelper($base);
+
+        if ($flag->setOn($value)) {
+            echo $flag->getBinaryStr();
+        } else {
+            echo $flag->getBinaryStr();
+        }
+        exit();
+
 
     }
 }
