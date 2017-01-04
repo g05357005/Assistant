@@ -11,9 +11,9 @@ class UserService
 
     private $user;
 
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        $this->user = new User();
     }
 
     public function register($name, $services)
