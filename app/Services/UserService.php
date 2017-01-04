@@ -19,7 +19,7 @@ class UserService
     public function register($name, $services)
     {
         $this->user->name = $name;
-        // $this->user->email = $email;
+        $this->user->email = '';
         $this->user->services = $services;
         return $this->user->save();
     }
