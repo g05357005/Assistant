@@ -47,12 +47,16 @@ class CenterController extends Controller
                     $text = $weatherService->getInfo();
                 } else if ($event->getText() === '註冊') {
                     $userService = new UserService();
-                    $profile = $this->bot->getProfile($event->getUserId());
-                    if ($userService->register($profile->displayName, $userService->SERVICES_WEATHER)) {
-                        $text = '已完成註冊';
-                    } else {
-                        $text = '註冊失敗，請重試';
+                    $res = $this->bot->getProfile($event->getUserId());
+                    if ($res->isSucceeded()) {
+                        $profile = $res->getJSONDecodedBody();
+                        if ($userService->register($profile['displayName'], $userService->SERVICES_WEATHER)) {
+                            $text = '已完成註冊';
+                        } else {
+                            $text = '註冊失敗，請重試';
+                        }
                     }
+                    
                 } else {
                     // Echo
                     $text = $event->getText();
