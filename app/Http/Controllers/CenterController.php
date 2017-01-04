@@ -50,7 +50,7 @@ class CenterController extends Controller
                     $res = $this->bot->getProfile($event->getUserId());
                     if ($res->isSucceeded()) {
                         $profile = $res->getJSONDecodedBody();
-                        if ($userService->register($profile['displayName'], $userService->SERVICES_WEATHER)) {
+                        if ($userService->register($profile['displayName'], $userService::SERVICES_WEATHER)) {
                             $text = '已完成註冊';
                         } else {
                             $text = '註冊失敗，請重試';
