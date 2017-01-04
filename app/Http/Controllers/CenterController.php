@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 use App\Helper\FlagHelper;
 use App\Services\WeatherService;
-use App\Services\RegisterService;
+use App\Services\UserService;
 
 class CenterController extends Controller
 {
