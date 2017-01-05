@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Handlers\EventHandler;
 use Illuminate\Http\Request;
 use LINE\LINEBot;
-use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use LINE\LINEBot\Constant\HTTPHeader;
 
 class CenterController extends Controller
 {
@@ -21,14 +21,10 @@ class CenterController extends Controller
 
     public function center(Request $request)
     {
-        // Check header from LINE
         $signature = $request->header(HTTPHeader::LINE_SIGNATURE);
-        if (empty($signature)) {
-            return $request->withStatus(400, 'Bad Request');
-        }
+        $body      = file_get_contents('php://input');
+        $handler   = new EventHandler($body, $signature);
 
-        $body    = file_get_contents('php://input');
-        $handler = new EventHandler($this->bot, $body, $signature);
         $handler->progress();
     }
 

@@ -3,23 +3,27 @@
 namespace App\Handlers;
 
 use Illuminate\Support\Facades\Log;
-use LINE\LINEBot;
-use Line\LINEBot\Event\MessageEvent\TextMessage;
-use Line\LINEBot\Event\MessageEvent\StickerMessage;
 use App\Services\WeatherService;
 use App\Services\UserService;
 use App\ParserModule\WeatherModule;
+use LINE\LINEBot;
+use LINE\LINEBot\HTTPClient\CurlHTTPClient;
+use Line\LINEBot\Event\MessageEvent\TextMessage;
+use Line\LINEBot\Event\MessageEvent\StickerMessage;
 
 class EventHandler
 {
     private $events = [];
 
+    private $httpClient;
+
     private $bot;
 
-    public function __construct(LINEBot $bot, $body, $signature)
+    public function __construct($body, $signature)
     {
-        $this->bot    = $bot;
-        $this->events = $this->bot->parseEventRequest($body, $signature);
+        $this->httpClient = new CurlHTTPClient(env('BOT_CHANNEL_ACCESS_TOKEN'));
+        $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
+        $this->events     = $this->bot->parseEventRequest($body, $signature);
     }
 
     public function progress()
