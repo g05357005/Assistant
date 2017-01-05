@@ -59,7 +59,7 @@ class EventHandler
         $res = $this->bot->getProfile($textMessage->getUserId());
         if ($res->isSucceeded()) {
             $profile = $res->getJSONDecodedBody();
-            if ($userService->register($profile['displayName'], $userService::SERVICES_WEATHER)) {
+            if ($userService->register($profile['displayName'], $textMessage->getUserId(), $userService::SERVICES_WEATHER)) {
                 return '已完成註冊';
             } else {
                 return '註冊失敗，請重試';
