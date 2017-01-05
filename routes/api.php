@@ -17,8 +17,6 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // })->middleware('auth:api');
 
-Route::post('center', 'CenterController@center');
-
-Route::get('weather', 'CenterController@weatherInfo');
+Route::post('center', 'CenterController@center')->middleware('checkLine');
 
 Route::get('test', 'CenterController@test');

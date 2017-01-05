@@ -16,10 +16,11 @@ class UserService
         $this->user = new User();
     }
 
-    public function register($name, $services)
+    public function register($name, $userMid, $services)
     {
-        $this->user->name = $name;
-        $this->user->email = '';
+        $this->user->mid      = $userMid;
+        $this->user->name     = $name;
+        $this->user->email    = '';
         $this->user->services = $services;
         return $this->user->save();
     }
