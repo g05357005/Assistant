@@ -14,6 +14,7 @@ use GuzzleHttp\Client;
 use App\Helper\FlagHelper;
 use App\Services\WeatherService;
 use App\Services\UserService;
+use App\ParserModule\WeatherModule;
 
 class CenterController extends Controller
 {
@@ -41,9 +42,8 @@ class CenterController extends Controller
 
         foreach ($events as $event) {
             if ($event instanceof TextMessage) {
-                // Weather info
                 if ($event->getText() === '天氣' or $event->getText() === 'weather') {
-                    $weatherService = new WeatherService($event);
+                    $weatherService = new WeatherService(new WeatherModule());
                     $text = $weatherService->getInfo();
                 } else if ($event->getText() === '註冊') {
                     $userService = new UserService();
