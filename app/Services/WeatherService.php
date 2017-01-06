@@ -4,12 +4,17 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use App\ParserModule\BaseModule;
+use Predis\Client as RedisClient;
 
 class WeatherService
 {
+    const REDIS_WEATHER_INFO = 'weatherInfo-%s';
+
     private $module;
 
     private $token;
+
+    private $ttl;
 
     public function __construct(BaseModule $module)
     {
@@ -19,11 +24,28 @@ class WeatherService
 
     public function getInfo()
     {
-        $client  = new Client();
-        $res     = $client->get($this->module->getUrl());
+        $client      = new Client();
+        $redisClient = new RedisClient([
+            'scheme' => 'tcp',
+            'host' => '127.0.0.1',
+            'port' => 6379,
+        ]);
+
+        $res = $client->get($this->module->getUrl());
+
+        $key = sprintf(self::REDIS_WEATHER_INFO, $this->module->getKey());
+        $redisClient->connect();
+        if ($redisClient->exists($key)) {
+            return $redisClient->get($key);
+        }
         
         if ($res->getStatusCode() === 200) {
-            return $this->module->parse($res->getBody());
+            $result = $this->module->parse($res->getBody());
+
+            $redisClient->set($key, $result);
+            $redisClient->expire($this->ttl);
+
+            return $result;
         }
 
         return false;

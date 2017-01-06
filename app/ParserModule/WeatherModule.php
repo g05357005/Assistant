@@ -20,6 +20,11 @@ class WeatherModule implements BaseModule
         $this->token = $token ? $token : env('WEATHER_SERVICE_TOKEN');
     }
 
+    public function getKey()
+    {
+        return 'weatherAPI-' . $this->dataIds['taipei'];
+    }
+
     public function getUrl()
     {
         return sprintf($this->endpointBase . '?dataid=%s&authorizationkey=%s',$this->dataIds['taipei'] , $this->token);
