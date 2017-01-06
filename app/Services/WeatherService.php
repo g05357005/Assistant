@@ -14,7 +14,7 @@ class WeatherService
 
     private $token;
 
-    private $ttl;
+    private $ttl = 7200;
 
     public function __construct(BaseModule $module)
     {
