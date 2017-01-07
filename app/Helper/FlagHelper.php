@@ -4,6 +4,9 @@ namespace App\Helper;
 
 class FlagHelper
 {
+    /**
+     * @var int $base
+     */
     private $base;
 
     /**
