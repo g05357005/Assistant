@@ -69,7 +69,8 @@ class EventHandler
 
     private function weatherProgress(TextMessage $textMessage)
     {
-        $weatherService = new WeatherService(new WeatherModule());
+        $weatherModule  = new WeatherModule(env('WEATHER_SERVICE_TOKEN'));
+        $weatherService = new WeatherService($weatherModule);
 
         return $weatherService->getInfo();
     }

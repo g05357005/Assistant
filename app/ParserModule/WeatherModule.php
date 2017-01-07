@@ -15,9 +15,9 @@ class WeatherModule implements BaseModule
 
     private $resMessage;
 
-    public function __construct($token = null)
+    public function __construct($token)
     {
-        $this->token = $token ? $token : env('WEATHER_SERVICE_TOKEN');
+        $this->token = $token;
     }
 
     public function getKey()
