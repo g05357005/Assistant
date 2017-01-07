@@ -12,14 +12,11 @@ class WeatherService
 
     private $module;
 
-    private $token;
-
     private $ttl = 7200;
 
     public function __construct(BaseModule $module)
     {
         $this->module = $module;
-        $this->token = env('WEATHER_SERVICE_TOKEN');
     }
 
     public function getInfo()
