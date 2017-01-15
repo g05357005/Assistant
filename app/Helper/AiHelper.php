@@ -54,9 +54,13 @@ class AiHelper
         return false;
     }
 
-    public function getResponse()
+    public function isMatch()
     {
-        return $this->response;
+        if ($this->getBody()->result->action === 'input.unknown') {
+            return false;
+        }
+
+        return true;
     }
 
     public function getBody()
@@ -70,10 +74,15 @@ class AiHelper
         return $body->result->action;
     }
 
-    public function getService()
+    public function getParameter($attr = null)
     {
         $body = $this->getBody();
-        return isset($body->result->parameters->service) ? $body->result->parameters->service:false;
+        $param = $body->result->parameters;
+        if (isset($param->$attr)) {
+            return $param->$attr;
+        }
+
+        return false;
     }
 
     private function buildOptions($body)
