@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use App\Services\WeatherService;
 use App\Services\UserService;
 use App\ParserModule\WeatherModule;
+use App\Helper\AiHelper;
 use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use Line\LINEBot\Event\MessageEvent\TextMessage;
@@ -28,12 +29,15 @@ class EventHandler
 
     public function progress()
     {
+        $aiHelper = new AiHelper();
+
         foreach ($this->events as $event) {
             $resText = '';
             if ($event instanceof TextMessage) {
-                if ($event->getText() === '註冊會員') {
+                $aiHelper->ask($event->getText());
+                if ($aiHelper->getAction() === 'register' and $aiHelper->getParameter('service') === 'account') {
                     $resText = $this->registerProgress($event);
-                } else if ($event->getText() === '天氣' or $event->getText() === 'weather') {
+                } else if ($aiHelper->getAction() === 'get' and $aiHelper->getParameter('service') === 'weather') {
                     $resText = $this->weatherProgress($event);
                 } else {
                     $resText = $this->echoProgress($event);
