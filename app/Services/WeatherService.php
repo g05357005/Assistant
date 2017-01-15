@@ -8,7 +8,7 @@ use Predis\Client as RedisClient;
 
 class WeatherService
 {
-    const REDIS_WEATHER_INFO = 'weatherInfo-%s';
+    const REDIS_WEATHER_INFO_KEY = 'weatherInfo-%s';
 
     private $module;
 
@@ -30,7 +30,7 @@ class WeatherService
 
         $res = $client->get($this->module->getUrl());
 
-        $key = sprintf(self::REDIS_WEATHER_INFO, $this->module->getKey());
+        $key = sprintf(self::REDIS_WEATHER_INFO_KEY, $this->module->getKey());
         $redisClient->connect();
         if ($redisClient->exists($key)) {
             return $redisClient->get($key);
@@ -40,7 +40,7 @@ class WeatherService
             $result = $this->module->parse($res->getBody());
 
             $redisClient->set($key, $result);
-            $redisClient->expire($this->ttl);
+            $redisClient->expire($key, $this->ttl);
 
             return $result;
         }
