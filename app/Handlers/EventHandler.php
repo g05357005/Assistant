@@ -82,12 +82,13 @@ class EventHandler
 
     private function echoProgress(TextMessage $textMessage)
     {
-        return $textMessage->getText();
+        $normalService = new NormalService();
+        return $normalService->doNotGetIt();
     }
 
     private function stickerProgress(StickerMessage $stickerMessage)
     {
-        $resText   = '>/////<';
+        $resText   = '我現在沒有貼圖QQ...';
         $packageId = $stickerMessage->getPackageId();
         $stickerId = $stickerMessage->getStickerId();
 
