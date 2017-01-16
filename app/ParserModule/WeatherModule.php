@@ -25,7 +25,7 @@ class WeatherModule implements BaseModule
     public function __construct($token, $location = null)
     {
         $this->token = $token;
-        $this->location = $location;
+        $this->location = trim($location);
     }
 
     private function getId()
