@@ -38,7 +38,8 @@ class EventHandler
                 if ($aiHelper->getAction() === 'register' and $aiHelper->getParameter('service') === 'account') {
                     $resText = $this->registerProgress($event);
                 } else if ($aiHelper->getAction() === 'get' and $aiHelper->getParameter('service') === 'weather') {
-                    $resText = $this->weatherProgress($event);
+                    $locations = $aiHelper->getParameter('geo-city');
+                    $resText = $this->weatherProgress($event, $locations[0]);
                 } else {
                     $resText = $this->echoProgress($event);
                 }
@@ -71,9 +72,9 @@ class EventHandler
         }
     }
 
-    private function weatherProgress(TextMessage $textMessage)
+    private function weatherProgress(TextMessage $textMessage, $location)
     {
-        $weatherModule  = new WeatherModule(env('WEATHER_SERVICE_TOKEN'));
+        $weatherModule  = new WeatherModule(env('WEATHER_SERVICE_TOKEN'), $location);
         $weatherService = new WeatherService($weatherModule);
 
         return $weatherService->getInfo();

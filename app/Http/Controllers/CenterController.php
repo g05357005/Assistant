@@ -24,22 +24,6 @@ class CenterController extends Controller
 
     public function test()
     {
-        $redisClient = new RedisClient([
-            'scheme' => 'tcp',
-            'host' => '127.0.0.1',
-            'port' => 6379,
-        ]);
 
-        $redisClient->connect();
-        // $redisClient->set('test', 'value');
-        // $redisClient->expire('test', 5);
-
-        if ($redisClient->isConnected()) {
-            echo $redisClient->get('test');
-        } else {
-            echo 'no';
-        }
-
-        exit();
     }
 }
