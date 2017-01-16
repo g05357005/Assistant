@@ -38,7 +38,8 @@ class EventHandler
                 if ($aiHelper->getAction() === 'register' and $aiHelper->getParameter('service') === 'account') {
                     $resText = $this->registerProgress($event);
                 } else if ($aiHelper->getAction() === 'get' and $aiHelper->getParameter('service') === 'weather') {
-                    $resText = $this->weatherProgress($event, $aiHelper->getParameter('geo-city'));
+                    $locations = $aiHelper->getParameter('geo-city');
+                    $resText = $this->weatherProgress($event, $locations[0]);
                 } else {
                     $resText = $this->echoProgress($event);
                 }
