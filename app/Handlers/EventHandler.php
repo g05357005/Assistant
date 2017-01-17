@@ -5,6 +5,7 @@ namespace App\Handlers;
 use Illuminate\Support\Facades\Log;
 use App\Services\WeatherService;
 use App\Services\UserService;
+use App\Services\NormalService;
 use App\ParserModule\WeatherModule;
 use App\Helper\AiHelper;
 use LINE\LINEBot;
