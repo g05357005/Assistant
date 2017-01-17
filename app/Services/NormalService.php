@@ -5,9 +5,10 @@ namespace App\Services;
 class NormalService
 {
     private $arrAgain = [
-        '我聽不懂你說的',
-        '我沒有這個指令喔',
-        '恩?',
+        '好喔',
+        '好的',
+        'OK',
+        '恩',
     ];
 
     public function __construct()
