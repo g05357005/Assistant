@@ -5,6 +5,7 @@ namespace App\Handlers;
 use Illuminate\Support\Facades\Log;
 use App\Services\WeatherService;
 use App\Services\UserService;
+use App\Services\NormalService;
 use App\ParserModule\WeatherModule;
 use App\Helper\AiHelper;
 use LINE\LINEBot;
@@ -38,8 +39,8 @@ class EventHandler
                 if ($aiHelper->getAction() === 'register' and $aiHelper->getParameter('service') === 'account') {
                     $resText = $this->registerProgress($event);
                 } else if ($aiHelper->getAction() === 'get' and $aiHelper->getParameter('service') === 'weather') {
-                    $locations = $aiHelper->getParameter('geo-city');
-                    $resText = $this->weatherProgress($event, $locations[0]);
+                    $location = $aiHelper->getParameter('geo-city');
+                    $resText = $this->weatherProgress($event, $location);
                 } else {
                     $resText = $this->echoProgress($event);
                 }
@@ -72,7 +73,7 @@ class EventHandler
         }
     }
 
-    private function weatherProgress(TextMessage $textMessage, $location)
+    private function weatherProgress(TextMessage $textMessage, $location = null)
     {
         $weatherModule  = new WeatherModule(env('WEATHER_SERVICE_TOKEN'), $location);
         $weatherService = new WeatherService($weatherModule);
@@ -82,12 +83,13 @@ class EventHandler
 
     private function echoProgress(TextMessage $textMessage)
     {
-        return $textMessage->getText();
+        $normalService = new NormalService();
+        return $normalService->doNotGetIt();
     }
 
     private function stickerProgress(StickerMessage $stickerMessage)
     {
-        $resText   = '>/////<';
+        $resText   = '我現在沒有貼圖QQ...';
         $packageId = $stickerMessage->getPackageId();
         $stickerId = $stickerMessage->getStickerId();
 
