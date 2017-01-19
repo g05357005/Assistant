@@ -16,7 +16,7 @@ class CenterController extends Controller
     public function center(Request $request)
     {
         $signature = $request->header(HTTPHeader::LINE_SIGNATURE);
-        $body      = file_get_contents('php://input');
+        $body      = $request->getContent();
         $handler   = new EventHandler($body, $signature);
 
         $handler->progress();
