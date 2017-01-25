@@ -4,51 +4,33 @@ namespace App\Helper;
 
 class FlagHelper
 {
-    /**
-     * @var int $base
-     */
-    private $base;
-
-    /**
-     * @param $base int base value for flag
-     * @return void
-     */
-    public function __construct($base)
-    {
-        $this->base = $base;
-    }
-
-    public function getValue()
-    {
-        return $this->base;
-    }
 
     /**
      * Get flag in binary string
      * @return string
      */
-    public function getBinaryStr()
+    public static function getBinaryStr($baseValue)
     {
-        return decbin($this->base);
+        return decbin($baseValue);
     }
 
-    public function isOn($value)
+    public static function isOn($value, $base)
     {
-        return $this->base & $value;
+        return $base & $value;
     }
 
-    public function isOff($value)
+    public static function isOff($value, $base)
     {
-        return !$this->isOn($value);
+        return !self::isOn($value, $base);
     }
 
-    public function setOn($value)
+    public static function setOn($value, $base)
     {
-        $this->base = $this->base | $value;
+        return $base | $value;
     }
 
-    public function setOff($value)
+    public static function setOff($value, $base)
     {
-        $this->base = $this->base & (~$value);
+        return $base & (~$value);
     }
 }

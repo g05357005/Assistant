@@ -19,4 +19,7 @@ use Illuminate\Http\Request;
 
 Route::post('center', 'CenterController@center')->middleware('checkLine');
 
+Route::get('push', 'CenterController@push');
+Route::post('push', 'CenterController@push');
+
 Route::get('test', 'CenterController@test');

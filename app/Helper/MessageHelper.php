@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Handlers;
+namespace App\Helper;
 
 use LINE\LINEBot;
 
-class MessageHandler
+class MessageHelper
 {
     private $bot;
 
@@ -19,5 +19,11 @@ class MessageHandler
     public function replyText($replyText)
     {
         return $this->bot->replyText($this->token, $replyText);
+    }
+
+    public function pushTextTo($to, $text)
+    {
+        $message = new LINEBot\MessageBuilder\TextMessageBuilder($text);
+        return $this->bot->pushMessage($to, $message);
     }
 }
