@@ -31,7 +31,7 @@ class CenterController extends Controller
     {
         $handler = new BroadcastHandler();
 
-        $handler->progress();
+        $handler->progress(json_decode($request->getContent()));
     }
 
     public function test()

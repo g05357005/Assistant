@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\User;
 use App\Helper\FlagHelper as Flag;
-use Illuminate\Database\Eloquent\Collection;
 
 class UserRepo
 {
@@ -24,13 +23,14 @@ class UserRepo
      */
     public function getUsersByService($service)
     {
-        $users = User::all()->reduce(function($carry, $item) use ($service) {
-            if (Flag::isOn($service, $item->services)) {
-                $carry[] = $item;
-            }
+        $users = User::all()
+            ->reduce(function($carry, $item) use ($service) {
+                if (Flag::isOn($service, $item->services)) {
+                    $carry[] = $item;
+                }
 
-            return $carry;
-        }, []);
+                return $carry;
+            }, []);
 
         return $users;
     }

@@ -19,24 +19,26 @@ class BroadcastHandler
         $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
     }
 
-    public function progress()
+    public function progress($body)
     {
         $earthquakeService = new EarthquakeService();
         $users = $earthquakeService->getRegisteredUser();
 
-        $this->pushAlert($users);
+        $message = $body->message->text;
+
+        $this->pushAlert($users, $message);
     }
 
-    private function pushAlert($users)
+    private function pushAlert($users, $message)
     {
-        $message = new LINEBot\MessageBuilder\TextMessageBuilder('hello~');
+        $message = new LINEBot\MessageBuilder\TextMessageBuilder($message);
 
         foreach ($users as $user) {
             $res = $this->bot->pushMessage($user->mid, $message);
 
-            echo '<pre>';
-            print_r($res);
-            echo '</pre>';
+            if (!$res->isSucceeded()) {
+                Log::warning($res->getHTTPStatus() . ' ' . $res->getRawBody());
+            }
         }
     }
 }
