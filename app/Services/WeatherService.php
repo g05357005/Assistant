@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Repositories\UserRepo;
 use GuzzleHttp\Client;
 use App\ParserModule\BaseModule;
 use Predis\Client as RedisClient;
@@ -12,11 +13,21 @@ class WeatherService
 
     private $module;
 
-    private $ttl = 7200;
+    /**
+     * Redis cache ttl (3 hr)
+     * @var int
+     */
+    private $ttl = 10800;
 
     public function __construct(BaseModule $module)
     {
         $this->module = $module;
+    }
+
+    public static function register($name, $userMid)
+    {
+        $userRepo = new UserRepo();
+        return $userRepo->registerNewUser($name, $userMid, UserRepo::SERVICES_WEATHER);
     }
 
     public function getInfo()

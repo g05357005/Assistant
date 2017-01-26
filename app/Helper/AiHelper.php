@@ -10,7 +10,7 @@ class AiHelper
 
     private $response;
 
-    private $endpint = 'https://api.api.ai/v1/';
+    private $endpoint = 'https://api.api.ai/v1/';
 
     private $headers = [];
 
@@ -33,7 +33,7 @@ class AiHelper
         ];
 
         $options = $this->buildOptions($body);
-        $this->response = $this->client->request('post', $this->endpint . 'query', $options);
+        $this->response = $this->client->request('post', $this->endpoint . 'query', $options);
     }
 
     public function isSucceeded()

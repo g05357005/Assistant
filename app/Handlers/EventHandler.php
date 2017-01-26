@@ -2,9 +2,8 @@
 
 namespace App\Handlers;
 
-use Illuminate\Support\Facades\Log;
+use App\Helper\MessageHelper;
 use App\Services\WeatherService;
-use App\Services\UserService;
 use App\Services\NormalService;
 use App\ParserModule\WeatherModule;
 use App\Helper\AiHelper;
@@ -12,6 +11,7 @@ use LINE\LINEBot;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use Line\LINEBot\Event\MessageEvent\TextMessage;
 use Line\LINEBot\Event\MessageEvent\StickerMessage;
+use Illuminate\Support\Facades\Log;
 
 class EventHandler
 {
@@ -50,8 +50,8 @@ class EventHandler
                 $resText = $this->stickerProgress($event);
             }
 
-            $messageHandler = new MessageHandler($this->bot, $event->getReplyToken());
-            $response = $messageHandler->replyText($resText);
+            $messageHelper = new MessageHelper($this->bot, $event->getReplyToken());
+            $response = $messageHelper->replyText($resText);
             if (!$response->isSucceeded()) {
                 // Logging
                 Log::warning($response->getHTTPStatus() . ' ' . $response->getRawBody());
@@ -61,11 +61,10 @@ class EventHandler
 
     private function registerProgress(TextMessage $textMessage)
     {
-        $userService = new UserService();
         $res = $this->bot->getProfile($textMessage->getUserId());
         if ($res->isSucceeded()) {
             $profile = $res->getJSONDecodedBody();
-            if ($userService->register($profile['displayName'], $textMessage->getUserId(), $userService::SERVICES_WEATHER)) {
+            if (WeatherService::register($profile['displayName'], $textMessage->getUserId())) {
                 return '已完成註冊';
             } else {
                 return '註冊失敗，請重試';
