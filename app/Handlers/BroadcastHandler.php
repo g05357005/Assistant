@@ -23,9 +23,7 @@ class BroadcastHandler
     {
         $earthquakeService = new EarthquakeService();
         $users = $earthquakeService->getRegisteredUser();
-
         $message = $body->message->text;
-
         $this->pushAlert($users, $message);
     }
 
