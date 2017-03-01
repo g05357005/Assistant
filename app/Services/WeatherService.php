@@ -11,6 +11,10 @@ class WeatherService
 {
     const REDIS_WEATHER_INFO_KEY = 'weatherInfo-%s';
 
+    /**
+     * module
+     * @var BaseModule
+     */
     private $module;
 
     /**
