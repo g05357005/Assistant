@@ -29,9 +29,9 @@ class CenterController extends Controller
 
     public function push(Request $request)
     {
-        $handler = new BroadcastHandler();
+        $handler = new BroadcastHandler($request->getContent());
 
-        $handler->progress(json_decode($request->getContent()));
+        $handler->progress();
     }
 
     public function test()

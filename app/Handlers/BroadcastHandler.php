@@ -9,24 +9,47 @@ use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 class BroadcastHandler
 {
 
+    /**
+     * Line http client
+     * @var CurlHTTPClient
+     */
     private $httpClient;
 
+    /**
+     * Line bot sdk
+     * @var LINEBot
+     */
     private $bot;
 
-    public function __construct()
+    private $body;
+
+    public function __construct($body)
     {
         $this->httpClient = new CurlHTTPClient(env('BOT_CHANNEL_ACCESS_TOKEN'));
         $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
+        $this->body       = $body;
     }
 
-    public function progress($body)
+    /**
+     * Do broadcast task
+     */
+    public function progress()
     {
         $earthquakeService = new EarthquakeService();
         $users = $earthquakeService->getRegisteredUser();
-        $message = $body->message->text;
+        $message = $this->getMessage();
         $this->pushAlert($users, $message);
     }
 
+    private function getMessage()
+    {
+        return $this->body->message->text;
+    }
+
+    /**
+     * @param $users
+     * @param $message
+     */
     private function pushAlert($users, $message)
     {
         $message = new LINEBot\MessageBuilder\TextMessageBuilder($message);
