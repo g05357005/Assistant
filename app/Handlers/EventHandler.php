@@ -15,17 +15,22 @@ use Illuminate\Support\Facades\Log;
 
 class EventHandler
 {
-    private $events = [];
 
-    private $httpClient;
+    /**
+     * @var LINEBot\Event\BaseEvent[]
+     */
+    private $events;
 
+    /**
+     * @var LINEBot
+     */
     private $bot;
 
     public function __construct($body, $signature)
     {
-        $this->httpClient = new CurlHTTPClient(env('BOT_CHANNEL_ACCESS_TOKEN'));
-        $this->bot        = new LINEBot($this->httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
-        $this->events     = $this->bot->parseEventRequest($body, $signature);
+        $httpClient = new CurlHTTPClient(env('BOT_CHANNEL_ACCESS_TOKEN'));
+        $this->bot = new LINEBot($httpClient, ['channelSecret' => env('BOT_CHANNEL_SECRET')]);
+        $this->events = $this->bot->parseEventRequest($body, $signature);
     }
 
     public function progress()
@@ -36,9 +41,9 @@ class EventHandler
             $resText = '';
             if ($event instanceof TextMessage) {
                 $aiHelper->ask($event->getText());
-                if ($aiHelper->getAction() === 'register' and $aiHelper->getParameter('service') === 'account') {
+                if ($aiHelper->getAction() === 'register' && $aiHelper->getParameter('service') === 'account') {
                     $resText = $this->registerProgress($event);
-                } else if ($aiHelper->getAction() === 'get' and $aiHelper->getParameter('service') === 'weather') {
+                } elseif ($aiHelper->getAction() === 'get' && $aiHelper->getParameter('service') === 'weather') {
                     $location = $aiHelper->getParameter('geo-city');
                     $resText = $this->weatherProgress($event, $location);
                 } else {
@@ -66,9 +71,9 @@ class EventHandler
             $profile = $res->getJSONDecodedBody();
             if (WeatherService::register($profile['displayName'], $textMessage->getUserId())) {
                 return '已完成註冊';
-            } else {
-                return '註冊失敗，請重試';
             }
+
+            return '註冊失敗，請重試';
         }
     }
 

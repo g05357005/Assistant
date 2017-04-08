@@ -7,6 +7,7 @@ class FlagHelper
 
     /**
      * Get flag in binary string
+     * @param $baseValue
      * @return string
      */
     public static function getBinaryStr($baseValue)

@@ -6,11 +6,15 @@ use LINE\LINEBot;
 
 class MessageHelper
 {
+
+    /**
+     * @var LINEBot
+     */
     private $bot;
 
     private $token;
 
-    function __construct(LINEBot $bot, $token)
+    public function __construct(LINEBot $bot, $token)
     {
         $this->bot = $bot;
         $this->token = $token;

@@ -36,14 +36,14 @@ class WeatherService
 
     public function getInfo()
     {
-        $client      = new Client();
+        $httpClient  = new Client();
         $redisClient = new RedisClient([
             'scheme' => 'tcp',
             'host' => '127.0.0.1',
             'port' => 6379,
         ]);
 
-        $res = $client->get($this->module->getUrl());
+        $res = $httpClient->get($this->module->getUrl());
 
         $key = sprintf(self::REDIS_WEATHER_INFO_KEY, $this->module->getKey());
         $redisClient->connect();

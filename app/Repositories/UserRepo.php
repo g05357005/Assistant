@@ -12,7 +12,7 @@ class UserRepo
 
     private $user;
 
-    function __construct()
+    public function __construct()
     {
         $this->user = new User();
     }
@@ -24,7 +24,7 @@ class UserRepo
     public function getUsersByService($service)
     {
         $users = User::all()
-            ->reduce(function($carry, $item) use ($service) {
+            ->reduce(function ($carry, $item) use ($service) {
                 if (Flag::isOn($service, $item->services)) {
                     $carry[] = $item;
                 }
@@ -37,9 +37,9 @@ class UserRepo
 
     public function registerNewUser($name, $userMid, $services = 0)
     {
-        $this->user->mid      = $userMid;
-        $this->user->name     = $name;
-        $this->user->email    = '';
+        $this->user->mid = $userMid;
+        $this->user->name = $name;
+        $this->user->email = '';
         $this->user->services = $services;
         return $this->user->save();
     }

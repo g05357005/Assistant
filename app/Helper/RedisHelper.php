@@ -17,7 +17,11 @@ class RedisHelper
 
     private $password;
 
-    public function __construct($options = [])
+    /**
+     * RedisHelper constructor.
+     * @param array $options
+     */
+    public function __construct(array $options = [])
     {
         if (!empty($options)) {
             foreach ($options as $option => $value) {

@@ -4,7 +4,7 @@ namespace App\Services;
 
 class NormalService
 {
-    private $arrAgain = [
+    private static $arrAgain = [
         '好喔',
         '好的',
         'OK',
@@ -15,14 +15,14 @@ class NormalService
     {
     }
 
-    public function echo($text)
+    public function reply($text)
     {
         return $text;
     }
 
     public function doNotGetIt()
     {
-        $index = mt_rand(0, count($this->arrAgain) - 1);
-        return $this->arrAgain[$index];
+        $index = random_int(0, count(self::$arrAgain) - 1);
+        return self::$arrAgain[$index];
     }
 }

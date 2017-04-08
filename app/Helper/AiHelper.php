@@ -6,13 +6,17 @@ use GuzzleHttp\Client;
 
 class AiHelper
 {
+
+    /**
+     * @var Client
+     */
     private $client;
 
     private $response;
 
     private $endpoint = 'https://api.api.ai/v1/';
 
-    private $headers = [];
+    private $headers;
 
     public function __construct()
     {
