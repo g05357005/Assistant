@@ -1,0 +1,40 @@
+language:
+- php
+- node_js
+php:
+  - '7.0'
+node_js:
+  - 'node'
+install:
+- composer install --quiet
+#- cp .env.exam .env
+#- /usr/bin/php artisan key:generate
+script:
+- ./vendor/bin/phpunit
+#- ./vendor/bin/phpcs app --standard=psr2
+before_deploy:
+- zip -rq latest * .*
+- test -d dpl_cd_upload || mkdir dpl_cd_upload
+- mv latest.zip dpl_cd_upload/latest.zip
+deploy:
+  - provider: s3
+    access_key_id: AKIAJNTUIRLLPCRBHD2Q
+    secret_access_key:
+        secure: vIBrEOeRMLmCHqJMrzpw+IJC7QCcKPx0405IWIQAvcVUn8PA3TEmaC4eqBQnbI2xoYZe32kFVrIwDCQ8L8xzKGYs3JL2w3nCRfdgCVccIZc3/hA9Enfwhf82NNu+PKzvMGqZ7DIOAZUaISFQnYfpDC2ttBTkQGpysLpX7E+4V/zkkRlpj+qXAxq7dlPzRDLDMQEwsRNT/T6W8ZImpfCHZOQB6JIofw4o9DG/649pHgjO5Sb86UjTljAZ9yOwpPsk8ZgHESCAmtmKKYxaZo17m+0US9vDN55MMQrJXuZdA9+no1HKkSAu6xhVwK+KOpSDQ5IcQJKLTFVtRkhpm8dutnr/2iNExTXgQBJeNmffs5vNmr+kz1MpFFqV8pf+WR6mh+cEztZt7Py2smuNMR4uhdVMQFcSJmHLRYRVlJgHVUh8pmfz5ZSgWTRAR8sNiOJtpdMJX6eo40mh+jXsLbVRn44vM8RDu5BeUwpH5ce5+KDD5tuw8fTFJ/0j8Kaz2+c9xHmM2y33qN274Z8SWYsz8SnbstnhxbO+IiZTJn7G3kkz7cMkbk9MOgsL1S+p9itmRh5Lw8wCbkl2NKowm9I+Kz0aUCKtlNixCgfYhOFGR+374RBAnJDftgDWyRmW3bsaWN5UxJ09AqSRjRN0OTBfzJ6BQLFj8V6+ebJgfOx33HY=
+    local_dir: dpl_cd_upload
+    skip_cleanup: true
+    on:
+      branch: master
+    bucket: travis-codedeploy
+  - provider: codedeploy
+    access_key_id: AKIAJNTUIRLLPCRBHD2Q
+    secret_access_key:
+        secure: vIBrEOeRMLmCHqJMrzpw+IJC7QCcKPx0405IWIQAvcVUn8PA3TEmaC4eqBQnbI2xoYZe32kFVrIwDCQ8L8xzKGYs3JL2w3nCRfdgCVccIZc3/hA9Enfwhf82NNu+PKzvMGqZ7DIOAZUaISFQnYfpDC2ttBTkQGpysLpX7E+4V/zkkRlpj+qXAxq7dlPzRDLDMQEwsRNT/T6W8ZImpfCHZOQB6JIofw4o9DG/649pHgjO5Sb86UjTljAZ9yOwpPsk8ZgHESCAmtmKKYxaZo17m+0US9vDN55MMQrJXuZdA9+no1HKkSAu6xhVwK+KOpSDQ5IcQJKLTFVtRkhpm8dutnr/2iNExTXgQBJeNmffs5vNmr+kz1MpFFqV8pf+WR6mh+cEztZt7Py2smuNMR4uhdVMQFcSJmHLRYRVlJgHVUh8pmfz5ZSgWTRAR8sNiOJtpdMJX6eo40mh+jXsLbVRn44vM8RDu5BeUwpH5ce5+KDD5tuw8fTFJ/0j8Kaz2+c9xHmM2y33qN274Z8SWYsz8SnbstnhxbO+IiZTJn7G3kkz7cMkbk9MOgsL1S+p9itmRh5Lw8wCbkl2NKowm9I+Kz0aUCKtlNixCgfYhOFGR+374RBAnJDftgDWyRmW3bsaWN5UxJ09AqSRjRN0OTBfzJ6BQLFj8V6+ebJgfOx33HY=
+    bucket: travis-codedeploy
+    key: latest.zip
+    application: assistant
+    deployment_group: assistant-group
+    region: ap-northeast-1
+    on:
+      branch: master
+    wait-until-deployed: true
